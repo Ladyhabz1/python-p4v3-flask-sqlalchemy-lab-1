@@ -15,13 +15,12 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 
-@app.route('/')
-def index():
-    body = {'message': 'Flask SQLAlchemy Lab 1'}
-    return make_response(body, 200)
+@app.route("/earthquakes/<int:id>", methods=["GET"])
+def get_earthquake(id):
+    earthquake = Earthquake.query.get(id)
+    if earthquake:
+        return jsonify(earthquake.to_dict()), 200
+    return jsonify({"message": f"Earthquake {id} not found."}), 404
 
-# Add views here
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(port=5555, debug=True)
